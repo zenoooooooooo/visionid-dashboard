@@ -1,9 +1,11 @@
-import { Document } from "mongoose"
+import { Document } from "mongoose";
 
-interface Log extends Document {
-    name: string;
-    description: string;
-    status: string;
-    date: Date;
-    time: string;
+interface LogType extends Document {
+  name: string;
+  description: string;
+  status: string;
+  date: Date;
+  time: string;
 }
+
+export default LogType;
