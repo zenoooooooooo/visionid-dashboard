@@ -8,7 +8,7 @@ const navLinks = [
   { title: "About", href: "/about" },
   { title: "Feature", href: "/feature" },
   { title: "Contact", href: "/contact" },
-  { title: "Login", href: "/login" },
+  { title: "Login", href: "/authentication" },
 ];
 
 export function Nav() {

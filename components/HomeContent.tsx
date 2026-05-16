@@ -28,6 +28,18 @@ function HomeContent() {
   return (
     <>
       <main className="text-white flex flex-col items-center font-michroma pt-20 md:pt-0 md:px-12">
+        {/* Animated Background */}
+<div className="absolute inset-0 overflow-hidden -z-10">
+
+  {/* Blob 1 */}
+  <div className="absolute top-[-10rem] left-[-5rem] w-[30rem] h-[30rem] bg-[#7F57F9]/30 rounded-full blur-3xl animate-blob"></div>
+
+  {/* Blob 2 */}
+  <div className="absolute bottom-[-10rem] right-[-5rem] w-[30rem] h-[30rem] bg-blue-500/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+
+  {/* Blob 3 */}
+  <div className="absolute top-[40%] left-[40%] w-[25rem] h-[25rem] bg-cyan-400/10 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
+</div>
         <div className="min-h-screen flex items-center">
           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-10 w-full max-w-6xl mx-auto px-6 md:px-10">
             <section className="font-michroma space-y-6 text-center md:text-left">

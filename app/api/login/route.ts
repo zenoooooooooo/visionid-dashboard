@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const isMatch = await bcrypt.compare(existingUser.password, password);
+    const isMatch = await bcrypt.compare(password, existingUser.password);
     if (!isMatch) {
       return NextResponse.json(
         { message: "Passwords did not match" },
