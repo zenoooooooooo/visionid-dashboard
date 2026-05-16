@@ -15,8 +15,8 @@ export function Nav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 font-michroma">
-      <div className="backdrop-blur-xl bg-black/40 border-b border-white/10">
+    <nav className="fixed top-0 left-0 w-full h-20 z-50 font-michroma">
+      <div className="backdrop-blur-xl bg-black/40 border-b border-white/10 lg:px-50">
         <div className="flex items-center justify-between px-6 md:px-12 py-5">
           <h1 className="text-white text-xl tracking-[0.3em]">
             <Link href="/">VISIONID</Link>
