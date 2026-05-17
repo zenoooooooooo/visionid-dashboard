@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 function Authentication() {
   const [isLogin, setIsLogin] = useState(true);
+
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -51,7 +54,7 @@ function Authentication() {
         throw new Error(data.message || "Something went wrong");
       }
 
-      console.log(data);
+      router.push("/dashboard");
 
       alert(isLogin ? "Login successful!" : "Account created successfully!");
 
@@ -61,6 +64,8 @@ function Authentication() {
         password: "",
       });
       localStorage.setItem("token", data.token);
+      localStorage.setItem("name", data.name);
+      localStorage.setItem("email", data.email);
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
