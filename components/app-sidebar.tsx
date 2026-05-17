@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 
 import {
   Sidebar,
@@ -11,62 +10,61 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 
-import {
-  MdDashboard,
-  MdAnalytics,
-  MdSecurity,
-} from "react-icons/md";
+import { MdDashboard, MdAnalytics, MdSecurity } from "react-icons/md";
 
 import { FaCamera, FaUsers, FaBook } from "react-icons/fa";
-
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FiLogOut } from "react-icons/fi";
 import { HiClipboardDocumentList } from "react-icons/hi2";
 
 import { BsRobot } from "react-icons/bs";
 
 const sidebarLinks = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: MdDashboard,
-  },
+  { title: "Activities", key: "activities", icon: MdDashboard },
   {
     title: "Attendance Sheet",
-    href: "/attendance-sheet",
+    key: "attendance",
     icon: HiClipboardDocumentList,
   },
-  {
-    title: "Live Camera",
-    href: "/live-camera",
-    icon: FaCamera,
-  },
-  {
-    title: "Analytics",
-    href: "/analytics",
-    icon: MdAnalytics,
-  },
-  {
-    title: "User Management",
-    href: "/user-management",
-    icon: FaUsers,
-  },
-  {
-    title: "AI Insights",
-    href: "/ai-insights",
-    icon: BsRobot,
-  },
-  {
-    title: "Security",
-    href: "/security",
-    icon: MdSecurity,
-  },
-  {
-    title: "Journal",
-    href: "/journal",
-    icon: FaBook,
-  },
+  { title: "Live Camera", key: "live-camera", icon: FaCamera },
+  { title: "Analytics", key: "analytics", icon: MdAnalytics },
+  { title: "User Management", key: "users", icon: FaUsers },
+  { title: "AI Insights", key: "ai", icon: BsRobot },
+  { title: "Security", key: "security", icon: MdSecurity },
+  { title: "Journal", key: "journal", icon: FaBook },
 ];
 
-export function AppSidebar() {
+type AppSidebarProps = {
+  activeTab: string;
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
+  const router = useRouter();
+
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    const name = localStorage.getItem("name") || "Unknown User";
+    const email = localStorage.getItem("email") || "No Email";
+
+    setUser({
+      name,
+      email,
+    });
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
+
+    router.push("/authentication");
+  };
   return (
     <Sidebar className="bg-[#2C2C31] font-michroma border-r-4 border-r-gray-300">
       <SidebarHeader className="flex flex-row bg-[#2C2C31] p-4 justify-center items-center gap-3 border-b-white border-b-2">
@@ -82,42 +80,65 @@ export function AppSidebar() {
         <div className="text-white">
           <h1 className="text-lg">VisionID</h1>
 
-          <p className="text-[10px] text-gray-300">
-            NeuroBridge Technologies
-          </p>
+          <p className="text-[10px] text-gray-300">NeuroBridge Technologies</p>
         </div>
       </SidebarHeader>
-
-      <SidebarContent className="bg-[#2C2C31] px-3 py-4">
-        <SidebarGroup className="space-y-2">
+      <SidebarContent className="bg-[#2C2C31] py-4">
+        <SidebarGroup className="space-y-2 p-0">
           {sidebarLinks.map((link) => {
             const Icon = link.icon;
+            const isActive = activeTab === link.key;
 
             return (
-              <Link
-                key={link.title}
-                href={link.href}
-                className="
-                  flex items-center gap-3
-                  rounded-xl
-                  px-4 py-3
-                  text-sm text-gray-200
-                  transition-all duration-200
-                  hover:bg-white/10
-                  hover:text-white
-                "
+              <button
+                key={link.key}
+                onClick={() => setActiveTab(link.key)}
+                className={`
+            w-full
+            flex items-center gap-3
+            px-5 py-3
+            text-sm
+            transition-all duration-300
+            hover:cursor-pointer
+  
+            ${
+              isActive
+                ? "bg-linear-to-r from-[#7F57F9] to-[#303035] text-white"
+                : "text-gray-200 hover:bg-linear-to-r hover:from-[#7F57F9] hover:to-[#303035] hover:text-white"
+            }
+          `}
               >
                 <Icon className="text-xl" />
-
                 <span>{link.title}</span>
-              </Link>
+              </button>
             );
           })}
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="bg-[#2C2C31] border-t border-white/10 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="overflow-hidden">
+            <h2 className="text-sm text-white truncate">{user.name}</h2>
 
-      <SidebarFooter className="bg-[#2C2C31] p-4 text-xs text-gray-400">
-        VisionID System v1.0
+            <p className="text-xs text-gray-400 truncate">{user.email}</p>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="
+            flex items-center justify-center
+            rounded-lg
+            bg-red-500/10
+            p-2
+            text-red-400
+            transition-all duration-200
+            hover:bg-red-500/20
+            hover:text-red-300
+          "
+          >
+            <FiLogOut className="text-lg" />
+          </button>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
