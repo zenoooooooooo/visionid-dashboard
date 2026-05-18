@@ -1,22 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
 
-import { FaCircle, FaUser } from "react-icons/fa";
+import { FaCircle, FaUser, FaRotateRight } from "react-icons/fa6";
 
-function LiveCamera() {
-  const [cameraData] = useState({
-    cameraName: "Camera 1 - Main Entrance",
-    isLive: true,
-  });
+const JETSON_IP = "192.168.100.197";
 
-  const [detectedIndividuals] = useState([
-    "John Doe",
-    "Jane Smith",
-    "Michael Lee",
-  ]);
+import { DetectionData } from "@/app/dashboard/page";
+
+type LiveCameraProps = {
+  detectedIndividuals: DetectionData[];
+};
+
+function LiveCamera({ detectedIndividuals }: LiveCameraProps) {
+  const [isLive, setIsLive] = useState(false);
+
+  const statusColor: Record<string, string> = {
+    Early: "text-blue-400",
+    "On Time": "text-green-400",
+    "No Schedule": "text-gray-400",
+  };
+
+  const [streamKey, setStreamKey] = useState(Date.now());
+
+  const refreshCamera = () => {
+    setStreamKey(Date.now());
+  };
+
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
@@ -52,67 +64,111 @@ function LiveCamera() {
                 <h2 className="text-lg font-semibold text-white">
                   Live Camera Feed
                 </h2>
+
                 <p className="text-sm text-zinc-400">
                   Real-time face detection monitoring
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
-                <FaCircle
-                  className={`text-xs ${
-                    cameraData.isLive ? "text-green-400" : "text-red-400"
-                  }`}
-                />
-
-                <span
-                  className={`text-sm font-medium ${
-                    cameraData.isLive ? "text-green-400" : "text-red-400"
-                  }`}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={refreshCamera}
+                  className="
+                    flex items-center gap-2
+                    rounded-lg
+                    border border-white/10
+                    bg-white/5
+                    px-3 py-2
+                    text-sm text-white
+                    transition hover:bg-white/10
+                  "
                 >
-                  {cameraData.isLive ? "LIVE" : "OFFLINE"}
-                </span>
+                  <FaRotateRight className="text-xs" />
+                  Refresh
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <FaCircle
+                    className={`text-xs ${
+                      isLive ? "text-green-400" : "text-red-400"
+                    }`}
+                  />
+
+                  <span
+                    className={`text-sm font-medium ${
+                      isLive ? "text-green-400" : "text-red-400"
+                    }`}
+                  >
+                    {isLive ? "LIVE" : "OFFLINE"}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className=" bg-black overflow-hidden">
+            <div className="relative w-full h-162.5 bg-black">
               <img
-                src="http://192.168.100.197:5000/video_feed"
+                key={streamKey}
+                src={`http://${JETSON_IP}:5000/video_feed?t=${streamKey}`}
                 alt="VisionID Live Feed"
                 className="w-full h-full object-cover"
+                onLoad={() => setIsLive(true)}
+                onError={() => setIsLive(false)}
               />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-[#2C2C31] border-white/10">
+        <Card className="bg-[#2C2C31] border-white/10 h-fit">
           <CardContent className="p-5">
             <h2 className="text-lg font-semibold mb-5 text-white">
               Detected Individuals
             </h2>
 
             <div className="space-y-3">
-              {detectedIndividuals.map((person, index) => (
-                <div
-                  key={index}
-                  className="
-                    flex items-center gap-3
-                    rounded-xl
-                    border border-white/10
-                    bg-black/20
-                    px-4 py-3
-                  "
-                >
-                  <div className="rounded-full bg-[#7F57F9]/20 p-2">
-                    <FaUser className="text-[#A78BFA]" />
-                  </div>
+              {detectedIndividuals.map((person, index) => {
+                const isLate = person.status?.startsWith("Late");
 
-                  <div>
-                    <p className="text-sm font-medium text-white">{person}</p>
+                return (
+                  <div
+                    key={`${person.name}-${index}`}
+                    className="
+                      flex items-center gap-3
+                      rounded-xl
+                      border border-white/10
+                      bg-black/20
+                      px-4 py-3
+                    "
+                  >
+                    <div className="rounded-full bg-[#7F57F9]/20 p-2">
+                      <FaUser className="text-[#A78BFA]" />
+                    </div>
 
-                    <p className="text-xs text-green-400">Recognized</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-white truncate">
+                        {person.name}
+                      </p>
+
+                      <div className="flex items-center justify-between mt-1">
+                        <p
+                          className={`text-xs font-medium ${
+                            isLate
+                              ? "text-red-400"
+                              : statusColor[
+                                  person.status as keyof typeof statusColor
+                                ] || "text-green-400"
+                          }`}
+                        >
+                          {person.status}
+                        </p>
+
+                        <span className="text-[11px] text-zinc-500">
+                          {person.time}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {detectedIndividuals.length === 0 && (
                 <div className="text-sm text-gray-400">

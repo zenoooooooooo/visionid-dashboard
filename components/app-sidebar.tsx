@@ -10,8 +10,8 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 
-import { MdDashboard, MdAnalytics, MdSecurity } from "react-icons/md";
-
+import { MdDashboard } from "react-icons/md";
+import { BsPeopleFill } from "react-icons/bs";
 import { FaCamera, FaUsers, FaBook } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -22,7 +22,7 @@ import { BsRobot } from "react-icons/bs";
 
 const sidebarLinks = [
   { title: "Live Camera", key: "live-camera", icon: FaCamera },
-  { title: "Activities", key: "activities", icon: MdDashboard },
+  { title: "Attendance Sheet", key: "attendance", icon: BsPeopleFill },
   // {
   //   title: "Attendance Sheet",
   //   key: "attendance",
@@ -41,7 +41,10 @@ type AppSidebarProps = {
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function AppSidebar({ activeTab = "live-camera", setActiveTab }: AppSidebarProps) {
+export function AppSidebar({
+  activeTab = "live-camera",
+  setActiveTab,
+}: AppSidebarProps) {
   const router = useRouter();
 
   const [user, setUser] = useState({
