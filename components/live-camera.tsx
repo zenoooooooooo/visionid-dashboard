@@ -28,10 +28,12 @@ function LiveCamera() {
     <div className="p-6 space-y-6 text-white">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Activities</h1>
+          <h1 className="text-3xl font-bold text-white">
+            Live Camera Monitoring
+          </h1>
 
-          <p className="text-gray-400 text-sm mt-1">
-            Monitor attendance, alerts, and recent activity
+          <p className="text-gray-400 mt-1">
+            Real-time face recognition and face tracking
           </p>
         </div>
 
@@ -40,15 +42,6 @@ function LiveCamera() {
 
           <h2 className="text-lg text-white font-semibold">{currentDate}</h2>
         </div>
-      </div>
-      <div>
-        <h1 className="text-3xl font-bold text-white">
-          Live Camera Monitoring
-        </h1>
-
-        <p className="text-gray-400 mt-1">
-          Real-time face recognition and face tracking
-        </p>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { connectToDatabase } from "@/app/backend/database/connection";
-import User from "@/app/backend/database/models/User";
+import { connectToDatabase } from "@/backend/database/connection";
+import User from "@/backend/database/models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         message: "User logged in successfully",
         token,
         name: existingUser.name,
-        email: existingUser.email
+        email: existingUser.email,
       },
       { status: 200 },
     );

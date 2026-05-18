@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { connectToDatabase } from "@/app/backend/database/connection";
-import User from "@/app/backend/database/models/User";
+import { connectToDatabase } from "@/backend/database/connection";
+import User from "@/backend/database/models/User";
 import bcrypt from "bcrypt";
 
 export async function POST(req: NextRequest) {

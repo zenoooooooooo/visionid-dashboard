@@ -14,7 +14,7 @@ import LiveCamera from "@/components/live-camera";
 // import UserManagement from "@/components/user-management";
 // import AIInsights from "@/components/ai-insights";
 // import Security from "@/components/security";
-// import Journal from "@/components/journal";
+import Journal from "@/components/journal";
 
 function Dashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -30,7 +30,8 @@ function Dashboard() {
       <main className="min-h-screen w-full bg-linear-to-b from-[#7F57F9] via-black to-black text-white font-michroma overflow-hidden">
         <SidebarTrigger />
         {activeTab === "activities" && <Activities />}
-      {activeTab === "live-camera" && <LiveCamera />}
+        {activeTab === "live-camera" && <LiveCamera />}
+        {activeTab === "journal" && <Journal />}
       </main>
     </SidebarProvider>
   );
