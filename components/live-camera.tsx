@@ -50,8 +50,11 @@ function LiveCamera() {
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <div>
                 <h2 className="text-lg font-semibold text-white">
-                  {cameraData.cameraName}
+                  Live Camera Feed
                 </h2>
+                <p className="text-sm text-zinc-400">
+                  Real-time face detection monitoring
+                </p>
               </div>
 
               <div className="flex items-center gap-2">
@@ -71,8 +74,12 @@ function LiveCamera() {
               </div>
             </div>
 
-            <div className="h-125 flex items-center justify-center bg-black">
-              <p className="text-gray-500 text-lg">Live Camera Feed</p>
+            <div className=" bg-black overflow-hidden">
+              <img
+                src="http://192.168.100.197:5000/video_feed"
+                alt="VisionID Live Feed"
+                className="w-full h-full object-cover"
+              />
             </div>
           </CardContent>
         </Card>
