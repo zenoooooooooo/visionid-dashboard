@@ -1,25 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
-function Journal() {
-  const [summary] = useState(
-    "Attendance activity remained stable throughout the day. Most employees arrived within the expected time window, while a few late entries were detected and logged automatically by the system.",
-  );
+type JournalProps = {
+  present: number;
+  absent: number;
+  avrArrTime: string;
+};
 
-  const today = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+function Journal({ present, absent, avrArrTime }: JournalProps) {
+  const [summary, setSummary] = useState("Generating AI summary...");
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const generateSummary = async () => {
+      try {
+        setLoading(true);
+
+        const response = await fetch("/api/ai-summary", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            present,
+            absent,
+            avgArrTime: avrArrTime,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message);
+        }
+
+        setSummary(data.summary);
+      } catch (error) {
+        console.error(error);
+
+        setSummary("Unable to generate AI summary at the moment.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    generateSummary();
+  }, [present, absent, avrArrTime]);
+
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   });
+
   return (
     <div className="p-6 space-y-6 text-white">
       <div className="flex items-center justify-between">
@@ -61,7 +98,13 @@ function Journal() {
         </div>
 
         <div className="rounded-2xl bg-neutral-950 border border-neutral-800 p-5">
-          <p className="text-neutral-300 leading-8 text-[15px]">{summary}</p>
+          {loading ? (
+            <p className="text-neutral-500 animate-pulse">
+              Generating summary...
+            </p>
+          ) : (
+            <p className="text-neutral-300 leading-8 text-[15px]">{summary}</p>
+          )}
         </div>
       </div>
     </div>

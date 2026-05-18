@@ -21,17 +21,18 @@ import { HiClipboardDocumentList } from "react-icons/hi2";
 import { BsRobot } from "react-icons/bs";
 
 const sidebarLinks = [
-  { title: "Activities", key: "activities", icon: MdDashboard },
-  {
-    title: "Attendance Sheet",
-    key: "attendance",
-    icon: HiClipboardDocumentList,
-  },
   { title: "Live Camera", key: "live-camera", icon: FaCamera },
-  { title: "Analytics", key: "analytics", icon: MdAnalytics },
-  { title: "User Management", key: "users", icon: FaUsers },
-  { title: "AI Insights", key: "ai", icon: BsRobot },
-  { title: "Security", key: "security", icon: MdSecurity },
+  { title: "Activities", key: "activities", icon: MdDashboard },
+  // {
+  //   title: "Attendance Sheet",
+  //   key: "attendance",
+  //   icon: HiClipboardDocumentList,
+  // },
+
+  // { title: "Analytics", key: "analytics", icon: MdAnalytics },
+  // { title: "User Management", key: "users", icon: FaUsers },
+  // { title: "AI Insights", key: "ai", icon: BsRobot },
+  // { title: "Security", key: "security", icon: MdSecurity },
   { title: "Journal", key: "journal", icon: FaBook },
 ];
 
@@ -40,7 +41,7 @@ type AppSidebarProps = {
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
+export function AppSidebar({ activeTab = "live-camera", setActiveTab }: AppSidebarProps) {
   const router = useRouter();
 
   const [user, setUser] = useState({

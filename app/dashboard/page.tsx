@@ -17,8 +17,12 @@ import LiveCamera from "@/components/live-camera";
 import Journal from "@/components/journal";
 
 function Dashboard() {
-  const [activeTab, setActiveTab] = useState("dashboard");
-
+  const [activeTab, setActiveTab] = useState("live-camera");
+  const [dataStats, setDataStats] = useState({
+    present: 0,
+    absent: 0,
+    avrArrTime: "",
+  });
   useEffect(() => {
     console.log(activeTab);
   }, [activeTab]);
@@ -31,7 +35,13 @@ function Dashboard() {
         <SidebarTrigger />
         {activeTab === "activities" && <Activities />}
         {activeTab === "live-camera" && <LiveCamera />}
-        {activeTab === "journal" && <Journal />}
+        {activeTab === "journal" && (
+          <Journal
+            present={dataStats.present}
+            absent={dataStats.absent}
+            avrArrTime={dataStats.avrArrTime}
+          />
+        )}
       </main>
     </SidebarProvider>
   );
